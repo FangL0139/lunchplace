@@ -1,12 +1,10 @@
 package com.gds.lunchPlaceBackend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "lunchplace")
 @Builder
 @Getter
 @Setter
@@ -15,8 +13,8 @@ import lombok.*;
 public class LunchPlace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    private Integer id;
+    private String placeName;
     private String postcode;
 
 }

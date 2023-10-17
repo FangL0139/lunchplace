@@ -3,6 +3,7 @@ package com.gds.lunchPlaceBackend.controller;
 import com.gds.lunchPlaceBackend.entity.LunchPlace;
 import com.gds.lunchPlaceBackend.service.LunchPlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,8 +13,8 @@ public class LunchPlaceController {
     private LunchPlaceService service;
 
     @PostMapping
-    public LunchPlace createLunchPlace(@RequestBody LunchPlace lunchPlace) {
-        return service.saveLunchPlace(lunchPlace);
+    public ResponseEntity<LunchPlace> createLunchPlace(@RequestBody LunchPlace lunchPlace) {
+        return ResponseEntity.ok().body(service.saveLunchPlace(lunchPlace));
     }
 
     @GetMapping("/random")
