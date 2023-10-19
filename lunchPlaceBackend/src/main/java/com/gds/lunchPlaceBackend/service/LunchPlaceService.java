@@ -1,29 +1,27 @@
 package com.gds.lunchPlaceBackend.service;
 
+import com.gds.lunchPlaceBackend.configuration.APIException;
 import com.gds.lunchPlaceBackend.entity.LunchPlace;
 import com.gds.lunchPlaceBackend.repo.LunchPlaceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Random;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class LunchPlaceService {
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(LunchPlaceService.class);
+    @Resource
     private LunchPlaceRepository repository;
 
+
     public LunchPlace saveLunchPlace(LunchPlace lunchPlace) {
-        return repository.save(lunchPlace);
+        return repository.saveAndFlush(lunchPlace);
     }
 
-    public LunchPlace getRandomLunchPlace() {
-        List<LunchPlace> lunchPlaces = (List<LunchPlace>) repository.findAll();
-        if (!lunchPlaces.isEmpty()) {
-            Random random = new Random();
-            int randomIndex = random.nextInt(lunchPlaces.size());
-            return lunchPlaces.get(randomIndex);
-        }
-        return null;
+    public LunchPlace getRandomLunchPlace() throws APIException {
+        return repository.findRandomPlace().orElseThrow(() -> new APIException("No place submitted.", "ERR-03"));
     }
 }
