@@ -13,7 +13,7 @@ public class InsertValidator {
     private LunchPlaceRepository repository;
 
     public void checkEmptyRequest(AddPlaceRequest request) throws APIException {
-        if (isInputEmpty(request.placeName()) || isInputEmpty(request.postcode())) {
+        if (isInputEmpty(request.placeName())) {
             throw new APIException("Place Information incomplete.", "ERR-01");
         }
     }
@@ -22,9 +22,4 @@ public class InsertValidator {
         return input.isEmpty() || input.isBlank();
     }
 
-    public void isPlaceExist(AddPlaceRequest request) throws APIException {
-        if (repository.findByPlaceName(request.placeName()).isPresent()) {
-            throw new APIException("Lunch Place Existed.", "ERR-02");
-        }
-    }
 }

@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface LunchPlaceRepository extends JpaRepository<LunchPlace, Long> {
-    Optional<LunchPlace> findByPlaceName(String placeName);
 
     @Query(value = "SELECT * FROM lunchplace ORDER BY RAND() LIMIT 1", nativeQuery = true)
     Optional<LunchPlace> findRandomPlace();

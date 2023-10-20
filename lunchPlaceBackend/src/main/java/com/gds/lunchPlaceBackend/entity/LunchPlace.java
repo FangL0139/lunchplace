@@ -15,6 +15,4 @@ public class LunchPlace {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String placeName;
-    private String postcode;
-
 }

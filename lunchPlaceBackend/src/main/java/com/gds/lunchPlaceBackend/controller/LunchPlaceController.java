@@ -2,6 +2,8 @@ package com.gds.lunchPlaceBackend.controller;
 
 import com.gds.lunchPlaceBackend.configuration.APIException;
 import com.gds.lunchPlaceBackend.dto.request.AddPlaceRequest;
+import com.gds.lunchPlaceBackend.dto.response.GeneralResponse;
+import com.gds.lunchPlaceBackend.dto.response.LunchPlaceResponse;
 import com.gds.lunchPlaceBackend.entity.LunchPlace;
 import com.gds.lunchPlaceBackend.service.LunchPlaceService;
 import com.gds.lunchPlaceBackend.validator.InsertValidator;
@@ -19,15 +21,20 @@ public class LunchPlaceController {
     private InsertValidator validator;
 
     @PostMapping
-    public ResponseEntity<LunchPlace> createLunchPlace(@RequestBody AddPlaceRequest addPlaceRequest) throws APIException {
-        validator.isPlaceExist(addPlaceRequest);
+    public ResponseEntity<LunchPlaceResponse> createLunchPlace(@RequestBody AddPlaceRequest addPlaceRequest) throws APIException {
         return ResponseEntity.ok().body(service.saveLunchPlace(
-                LunchPlace.builder().placeName(addPlaceRequest.placeName())
-                        .postcode(addPlaceRequest.postcode()).build()));
+                LunchPlace.builder()
+                        .placeName(addPlaceRequest.placeName())
+                        .build()));
     }
 
     @GetMapping("/random")
-    public LunchPlace getRandomLunchPlace() throws APIException {
-        return service.getRandomLunchPlace();
+    public ResponseEntity<LunchPlaceResponse> getRandomLunchPlace() throws APIException {
+        return ResponseEntity.ok().body(service.getRandomLunchPlace());
+    }
+
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<GeneralResponse> deleteAllPlaces() throws APIException {
+        return ResponseEntity.ok().body(service.deleteAllPlaces());
     }
 }

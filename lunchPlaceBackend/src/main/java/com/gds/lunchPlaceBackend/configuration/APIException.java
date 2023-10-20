@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class APIException extends Exception {
-    private String errorCode;
+    private final String errorCode;
 
     public APIException(String message, String errorCode) {
         super(message);
