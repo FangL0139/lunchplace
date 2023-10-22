@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Lunch Place API
+  description: |
+    This API provides endpoints for inserting and selecting lunch places.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+
+paths:
+  /api/lunch-places:
+    post:
+      summary: Create a new lunch place
+      operationId: createLunchPlace
+      requestBody:
+        description: The lunch place data to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddPlaceRequest"
+      responses:
+        "200":
+          description: Successfully created a lunch place
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LunchPlaceResponse"
+      tags:
+        - Lunch Places
+
+  /api/lunch-places/random:
+    get:
+      summary: Get a random lunch place
+      operationId: getRandomLunchPlace
+      responses:
+        "200":
+          description: Successfully retrieved a random lunch place
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LunchPlaceResponse"
+      tags:
+        - Lunch Places
+
+  /api/lunch-places/delete-all:
+    delete:
+      summary: Delete all lunch places
+      operationId: deleteAllPlaces
+      responses:
+        "200":
+          description: Successfully deleted all lunch places
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneralResponse"
+      tags:
+        - Lunch Places
+
+components:
+  schemas:
+    AddPlaceRequest:
+      type: object
+      properties:
+        placeName:
+          type: string
+      example:
+        placeName: "Din Tai Fung"
+
+    LunchPlaceResponse:
+      type: object
+      properties:
+        placeName:
+          type: string
+      example:
+        placeName: "Din Tai Fung"
+
+    GeneralResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        errorCode:
+          type: string
+      example:
+        errorCode: "ERR-03"
+        message: "No place submitted."

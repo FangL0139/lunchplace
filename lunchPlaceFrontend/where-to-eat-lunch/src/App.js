@@ -6,11 +6,13 @@ function App() {
   const [lunchPlace, setLunchPlace] = useState('');
   const [submitRes, setSubmitRes] = useState('');
   const [getRes, setGetRes] = useState('');
+  const [responseType, setResponseType] = useState('');
+  const [responseTypeGet, setResponseTypeGet] = useState('');
 
   const handleInputChange = (e) => {
     if (e.target.name === 'lunchPlace') {
       setLunchPlace(e.target.value);
-    } 
+    }
   };
 
   const handleSubmit = () => {
@@ -25,21 +27,21 @@ function App() {
         },
         body: JSON.stringify({ "placeName": lunchPlace }),
       })
-        // .then((res) => res.json())
         .then((res) => {
           if (res.ok) {
+            setResponseType('success');
             setSubmitRes('Lunch Place saved');
             console.log(res);
           } else {
-            // return submitRes.text().then((error) => {
+            setResponseType('error');
             res.json().then((data) => {
               setSubmitRes(data.message);
               console.log(data);
             });
-            // });
           }
         })
         .catch((error) => {
+          setResponseType('error');
           setSubmitRes(error.message);
         });
     }
@@ -54,13 +56,14 @@ function App() {
   const handleFindPlace = () => {
     // Send an HTTP GET request to the server
     fetch('http://localhost:8081/api/lunch-places/random')
-      // .then((res) => res.json())
       .then((res) => {
         console.log(res);
         if (res.ok) {
+          setResponseTypeGet('success');
           res.json().then((data) =>
-            setGetRes(`Place Name: ${data.placeName}`));
+            setGetRes(`Your lunch place is ${data.placeName}!`));
         } else {
+          setResponseTypeGet('error');
           res.json().then((data) => {
             setGetRes(data.message);
             console.log(data);
@@ -68,40 +71,43 @@ function App() {
         }
       })
       .catch((error) => {
+        setResponseTypeGet('error');
         setGetRes(error.message);
       });
   };
 
-  const handfleDeleteAll = ()=>{
+  const handleDeleteAll = () => {
     fetch('http://localhost:8081/api/lunch-places/delete-all', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     })
-      // .then((res) => res.json())
       .then((res) => {
         if (res.ok) {
+          setResponseTypeGet('success');
           setGetRes('All Places deleted');
           console.log(res);
         } else {
-          // return submitRes.text().then((error) => {
+          setResponseTypeGet('error');
           res.json().then((data) => {
             setGetRes(data.message);
             console.log(data);
           });
-          // });
         }
       })
       .catch((error) => {
+        setResponseTypeGet('error');
         setGetRes(error.message);
       });
   }
 
   return (
     <div className='App'>
-      <h1 style={{ fontWeight: 'bold' }}>Where to Eat Lunch</h1>
-      <div>
+      <div className='main-heading'>
+        <h1>Where to Eat Lunch</h1>
+      </div>
+      <div className="input-container">
         <input
           type="text"
           name="lunchPlace"
@@ -112,10 +118,14 @@ function App() {
         <button onClick={handleSubmit}>Submit</button>
         <button onClick={handleClear}>Clear</button>
       </div>
-      <div style={{ color: 'green' }}>{submitRes}</div>
-      <button onClick={handleFindPlace}>Find a Place</button>
-      <button onClick={handfleDeleteAll}>Delete all places</button>
-      <div style={{ color: 'green' }}>{getRes}</div>
+      {submitRes && <div className={responseType === 'success' ? 'success' : 'error'}>{submitRes}</div>}
+      {!submitRes && <div style={{ height: '20px' }}></div>}
+      <div className="input-container button-container">
+        <button onClick={handleFindPlace}>Find a Place</button>
+        <button onClick={handleDeleteAll} className="delete-button">Delete all places</button>
+      </div>
+      {getRes && <div className={responseTypeGet === 'success' ? 'success' : 'error'}>{getRes}</div>}
+      {!getRes && <div style={{ height: '20px' }}></div>}
     </div>
   );
 }
