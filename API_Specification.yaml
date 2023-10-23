@@ -85,5 +85,5 @@ components:
         errorCode:
           type: string
       example:
-        errorCode: "ERR-03"
-        message: "No place submitted."
+        errorCode: null
+        message: "All places deleted."
